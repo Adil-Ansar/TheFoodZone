@@ -12,7 +12,7 @@ const transactionModel = mongoose.model(
             receiverName: { type: String },
             //payment
             paymentMethod: { type: String, enum: ["offline", "online"] },
-            subPaymentMethod: { type: String, enum: ["creditCard", "debitCard", "bankTransfer"] },
+            subPaymentMethod: { type: String, enum: ["creditCard", "debitCard", "bankTransfer", "NA"] },
             amount: { type: Number },
 
             createdAt: Number,

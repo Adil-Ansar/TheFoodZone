@@ -1,8 +1,12 @@
 const { transactionModel } = require("../models/transactionModel");
 const { userModel } = require("../models/userModel");
+const { mongoose } = require("../../helper/dbConnect");
 
 const payment = async (req, res) => {
     try {
+        const session = await mongoose.startSession();
+        session.startTransaction();
+
         const { userId: payerId } = req.decoded;
         const { receiverId, paymentMethod, subPaymentMethod, amount } = req.body;
 
@@ -25,20 +29,26 @@ const payment = async (req, res) => {
             });
         }
 
-        const updatePayerAmount = await userModel.findOneAndUpdate(
+        await userModel.findOneAndUpdate(
             { userId: payerId },
             {
                 $inc: { amount: -amount }
+            },
+            {
+                session
             }
         );
-        const updateRecieverAmount = await userModel.findOneAndUpdate(
+        await userModel.findOneAndUpdate(
             { userId: receiverId },
             {
                 $inc: { amount: amount }
+            },
+            {
+                session
             }
         );
 
-        const createTransaction = transactionModel.create({
+        await transactionModel.create([{
             payerId,
             payerName: findPayer.name,
             receiverId,
@@ -46,14 +56,16 @@ const payment = async (req, res) => {
             paymentMethod,
             subPaymentMethod: paymentMethod === "online" ? subPaymentMethod : "NA",
             amount,
-        })
-        return res.status(500).json({
-            meta: { msg: "Something went wrong", status: false },
-            data: userId
-        })
+        }], {
+            session
+        });
 
-
+        await session.commitTransaction()
+        return res.status(201).json({
+            meta: { msg: "Payment has been successfully processed.", status: true },
+        })
     } catch (error) {
+        await session.abortTransaction()
         return res.status(500).json({
             meta: { msg: "Something went wrong", status: false },
             data: error.msg
