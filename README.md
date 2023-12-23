@@ -25,7 +25,7 @@ Set up environment variables
 
 Create a .env file in the root directory and add the following:
 
-    PORT=4000
+    PORT=3000
     MONGODB_URI=<your_mongodb_uri>
     JWT_SECRET=<your_jwt_secret>
 
