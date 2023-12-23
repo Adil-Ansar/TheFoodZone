@@ -53,10 +53,5 @@ bash
     npm run dev
 
 Usage
-
     Use Postman or similar tools to interact with the APIs.
     Refer to the Postman collection for available endpoints and their usage.
-
-License
-
-This project is licensed under the ISC License - see the LICENSE file for details.
