@@ -14,7 +14,7 @@ const {
 userRoutes.post("/signup", signUp);
 userRoutes.post("/signin", signIn);
 userRoutes.get("/getuserdetails", isAuthenticatedUSer, getUserDetails);
-userRoutes.get("/updateuserdetails", isAuthenticatedUSer, updateUserDetails);
+userRoutes.put("/updateuserdetails", isAuthenticatedUSer, updateUserDetails);
 userRoutes.post("/deleteaccount", isAuthenticatedUSer, deleteAccount);
 userRoutes.get("/gettransaciotnlist", isAuthenticatedUSer, getTransaciotnList);
 userRoutes.get("/gettransaciotndetails/:transactionId", isAuthenticatedUSer, getTransaciotnDetails);

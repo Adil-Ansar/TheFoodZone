@@ -97,6 +97,11 @@ const getUserDetails = async (req, res) => {
     try {
         const { userId } = req.decoded;
 
+        if (!userId) {
+            return res.status(400).json({
+                meta: { msg: "Parameter missing.", status: false },
+            });
+        }
         const findUser = await userModel.findOne({ userId });
         if (findUser) {
             return res.status(200).json({
