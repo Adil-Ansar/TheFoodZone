@@ -1,11 +1,11 @@
 const mongoose = require("mongoose");
 
-const userModel = mongoose.model(
-    "user",
+const adminModel = mongoose.model(
+    "admin",
     new mongoose.Schema(
         {
-            //user
-            userId: { type: mongoose.Schema.Types.ObjectId, auto: true },
+            //admin
+            adminId: { type: mongoose.Schema.Types.ObjectId, auto: true },
             name: { type: String },
             email: { type: String },
             password: { type: String },
@@ -17,4 +17,4 @@ const userModel = mongoose.model(
     )
 );
 
-module.exports = { userModel };
+module.exports = { adminModel };

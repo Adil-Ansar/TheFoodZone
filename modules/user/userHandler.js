@@ -1,4 +1,4 @@
-const { adminModel } = require("../models/adminModel");
+const { userModel } = require("../models/userModel");
 const { jwtToken, hashPassword, comparePasswords } = require("../../helper/comFun");
 
 
@@ -12,27 +12,27 @@ const signUp = async (req, res) => {
             });
         }
 
-        const findAdmin = await adminModel.findOne({
+        const findUser = await userModel.findOne({
             email
         })
-        if (findAdmin) {
+        if (findUser) {
             return res.status(409).json({
-                meta: { msg: "Admin already exists. Please use a different email or username.", status: false },
+                meta: { msg: "User already exists. Please use a different email or username.", status: false },
             });
         }
 
         const hashpassword = await hashPassword(password);
-        const adminObj = {
+        const userObj = {
             name,
             email,
             password: hashpassword
         }
 
-        const admindata = await adminModel.create(adminObj);
-        if (admindata) {
+        const userdata = await userModel.create(userObj);
+        if (userdata) {
             return res.status(201).json({
-                meta: { msg: "Admin created.", status: true },
-                data: admindata
+                meta: { msg: "User created.", status: true },
+                data: userdata
             });
         } else {
             return res.status(400).json({
@@ -57,29 +57,29 @@ const signIn = async (req, res) => {
             });
         }
 
-        const admindata = await adminModel.findOne({
+        const userdata = await userModel.findOne({
             email
         })
 
-        if (admindata) {
-            const isCorrectPassword = await comparePasswords(password, admindata.password)
+        if (userdata) {
+            const isCorrectPassword = await comparePasswords(password, userdata.password)
             if (!isCorrectPassword) {
                 return res.status(200).json({
                     meta: { msg: "Invalid email or password. Please check your credentials and try again.", status: false }
                 });
             }
             const token = await jwtToken({
-                name: admindata.name,
-                email: admindata.email
+                name: userdata.name,
+                email: userdata.email
             });
             return res.status(200).json({
-                meta: { msg: "Admin signIn successfully.", status: true },
-                data: admindata,
+                meta: { msg: "User signIn successfully.", status: true },
+                data: userdata,
                 token
             });
         } else {
             return res.status(400).json({
-                meta: { msg: "Admin not found", status: false },
+                meta: { msg: "User not found", status: false },
             });
         }
     } catch (error) {
