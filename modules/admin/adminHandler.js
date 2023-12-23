@@ -1,6 +1,7 @@
 const { adminModel } = require("../models/adminModel");
 const { jwtToken, hashPassword, comparePasswords } = require("../../helper/comFun");
 const { userModel } = require("../models/userModel");
+const { transactionModel } = require("../models/transactionModel");
 
 
 const signUp = async (req, res) => {
@@ -154,14 +155,75 @@ const getUserDetails = async (req, res) => {
     }
 }
 
+const getTransaciotnList = async (req, res) => {
+    try {
+        const { adminId } = req.decoded;
+
+        const findAdmin = await adminModel.findOne({ adminId });
+        if (!findAdmin) {
+            return res.status(400).json({
+                meta: { msg: "Admin not found", status: false },
+            });
+        };
+
+        const findTransactionList = await transactionModel.find();
+
+        if (findTransactionList.length) {
+            return res.status(200).json({
+                meta: { msg: "TransactionList list has been retrieved successfully.", status: true },
+                data: findTransactionList
+            });
+        } else {
+            return res.status(400).json({
+                meta: { msg: "Unable to retrieve the transactionList list at this time.", status: false },
+            });
+        }
+    } catch (error) {
+        return res.status(500).json({
+            meta: { msg: "Something went wrong.", status: false },
+            data: error.message
+        });
+    }
+}
+
+const getTransaciotnDetails = async (req, res) => {
+    try {
+        const { adminId } = req.decoded;
+        const { transactionId } = req.params;
+
+        const findAdmin = await adminModel.findOne({ adminId });
+        if (!findAdmin) {
+            return res.status(400).json({
+                meta: { msg: "Admin not found", status: false },
+            });
+        };
+
+        const findTransaction = await transactionModel.findOne({ transactionId });
+        if (findTransaction) {
+            return res.status(200).json({
+                meta: { msg: "Transaction has been retrieved successfully.", status: true },
+                data: findTransaction
+            });
+        } else {
+            return res.status(400).json({
+                meta: { msg: "Unable to retrieve the transaction at this time.", status: false },
+            });
+        }
+    } catch (error) {
+        return res.status(500).json({
+            meta: { msg: "Something went wrong.", status: false },
+            data: error.message
+        });
+    }
+}
 
 module.exports = {
     signUp,
     signIn,
     getUserList,
     getUserDetails,
-    // getTransaciotnList,
-    // getTransaciotnDetails,
+    getTransaciotnList,
+    getTransaciotnDetails,
     // updateUserDetails
     // deleteUser
 };
