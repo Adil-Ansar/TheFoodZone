@@ -8,7 +8,7 @@ const {
     getUserDetails,
     getTransaciotnList,
     getTransaciotnDetails,
-    // updateUserDetails,
+    updateUserDetails,
     // deleteUser
 } = require("./adminHandler")
 
@@ -18,7 +18,7 @@ adminRoutes.get("/getuserlist", isAuthenticatedUSer, getUserList);
 adminRoutes.get("/getuserdetails/:userId", isAuthenticatedUSer, getUserDetails);
 adminRoutes.get("/gettransaciotnlist", isAuthenticatedUSer, getTransaciotnList);
 adminRoutes.get("/gettransaciotndetails/:transactionId", isAuthenticatedUSer, getTransaciotnDetails);
-// adminRoutes.get("/updateuserdetails", isAuthenticatedUSer, updateUserDetails);
+adminRoutes.put("/updateuserdetails", isAuthenticatedUSer, updateUserDetails);
 // adminRoutes.get("/deleteuser", isAuthenticatedUSer, deleteUser);
 // adminRoutes.get("/deletetransaction", isAuthenticatedUSer, deleteTransaction);
 

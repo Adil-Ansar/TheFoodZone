@@ -217,6 +217,61 @@ const getTransaciotnDetails = async (req, res) => {
     }
 }
 
+const updateUserDetails = async (req, res) => {
+    try {
+        const { adminId } = req.decoded;
+        const { userId, name, email } = req.body;
+
+        if (!userId) {
+            return res.status(400).json({
+                meta: { msg: "Parameter missing.", status: false },
+            });
+        }
+
+        const findAdmin = await adminModel.findOne({ adminId });
+        if (!findAdmin) {
+            return res.status(400).json({
+                meta: { msg: "Admin not found", status: false },
+            });
+        };
+
+        const findUser = await userModel.findOne({ userId });
+        if (!findUser) {
+            return res.status(400).json({
+                meta: { msg: "User not found", status: false },
+            });
+        };
+
+        const updateObj = {
+            ...userId && { userId },
+            ...name && { name },
+            ...email && { email }
+        };
+        const updateUser = await userModel.findOneAndUpdate({
+            userId: userId
+        }, {
+            $set: updateObj
+        }, {
+            new: true
+        })
+        if (updateUser) {
+            return res.status(200).json({
+                meta: { msg: "User has been updated successfully.", status: true },
+                data: updateUser
+            });
+        } else {
+            return res.status(400).json({
+                meta: { msg: "Unable to update the user at this time.", status: false },
+            });
+        }
+    } catch (error) {
+        return res.status(500).json({
+            meta: { msg: "Something went wrong.", status: false },
+            data: error.message
+        });
+    }
+}
+
 module.exports = {
     signUp,
     signIn,
@@ -224,6 +279,6 @@ module.exports = {
     getUserDetails,
     getTransaciotnList,
     getTransaciotnDetails,
-    // updateUserDetails
+    updateUserDetails
     // deleteUser
 };
