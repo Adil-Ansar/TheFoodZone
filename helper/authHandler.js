@@ -10,8 +10,9 @@ const isAuthenticatedUSer = async (req, res, next) => {
             });
         }
 
-        const decodedData = jwt.verify(token, process.env.SECRET_KEY);
+        const decodedData = jwt.verify(token, process.env.JWT_KEY);
         if (decodedData) {
+            req.decoded = decodedData;
             next()
         } else {
             return res.status(400).json({
