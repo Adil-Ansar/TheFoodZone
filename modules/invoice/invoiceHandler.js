@@ -3,8 +3,9 @@ const { userModel } = require("../models/userModel");
 const { mongoose } = require("../../helper/dbConnect");
 
 const payment = async (req, res) => {
+
+    const session = await mongoose.startSession();
     try {
-        const session = await mongoose.startSession();
         session.startTransaction();
 
         const { userId: payerId } = req.decoded;
@@ -48,7 +49,7 @@ const payment = async (req, res) => {
             }
         );
 
-        await transactionModel.create([{
+        const createTransaction = await transactionModel.create([{
             payerId,
             payerName: findPayer.name,
             receiverId,
@@ -63,13 +64,17 @@ const payment = async (req, res) => {
         await session.commitTransaction()
         return res.status(201).json({
             meta: { msg: "Payment has been successfully processed.", status: true },
+            data: createTransaction
         })
     } catch (error) {
-        await session.abortTransaction()
+        if (session) {
+            await session.abortTransaction();
+            session.endSession();
+        }
         return res.status(500).json({
-            meta: { msg: "Something went wrong", status: false },
-            data: error.msg
-        })
+            meta: { msg: "Something went wrong.", status: false },
+            data: error.message 
+        });
     }
 }
 
