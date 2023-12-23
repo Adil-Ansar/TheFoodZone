@@ -9,6 +9,7 @@ const userModel = mongoose.model(
             name: { type: String },
             email: { type: String },
             password: { type: String },
+            amount: { type: Number, default: 0 },
 
             createdAt: Number,
             updatedAt: Number,

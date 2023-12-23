@@ -69,6 +69,7 @@ const signIn = async (req, res) => {
                 });
             }
             const token = await jwtToken({
+                userId: userdata.userId,
                 name: userdata.name,
                 email: userdata.email
             });
