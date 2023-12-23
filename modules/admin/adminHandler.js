@@ -271,6 +271,36 @@ const updateUserDetails = async (req, res) => {
     }
 }
 
+const deleteUser = async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const findUser = await userModel.findOne({ userId });
+        if (!findUser) {
+            return res.status(400).json({
+                meta: { msg: "User not found", status: false },
+            });
+        };
+
+        const deleteUser = await userModel.findOneAndDelete({ userId });
+        if (deleteUser) {
+            return res.status(200).json({
+                meta: { msg: "User has been deleted successfully.", status: true },
+                data: deleteUser
+            });
+        } else {
+            return res.status(400).json({
+                meta: { msg: "Unable to delete the user at this time.", status: false },
+            });
+        }
+
+    } catch (error) {
+        return res.status(500).json({
+            meta: { msg: "Something went wrong.", status: false },
+            data: error.message
+        });
+    }
+}
+
 module.exports = {
     signUp,
     signIn,
@@ -278,5 +308,6 @@ module.exports = {
     getUserDetails,
     getTransaciotnList,
     getTransaciotnDetails,
-    updateUserDetails
+    updateUserDetails,
+    deleteUser
 };

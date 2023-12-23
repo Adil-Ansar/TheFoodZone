@@ -8,7 +8,8 @@ const {
     getUserDetails,
     getTransaciotnList,
     getTransaciotnDetails,
-    updateUserDetails
+    updateUserDetails,
+    deleteUser
 } = require("./adminHandler")
 
 adminRoutes.post("/signup", signUp);
@@ -18,6 +19,7 @@ adminRoutes.get("/getuserdetails/:userId", isAuthenticatedUSer, getUserDetails);
 adminRoutes.get("/gettransaciotnlist", isAuthenticatedUSer, getTransaciotnList);
 adminRoutes.get("/gettransaciotndetails/:transactionId", isAuthenticatedUSer, getTransaciotnDetails);
 adminRoutes.put("/updateuserdetails", isAuthenticatedUSer, updateUserDetails);
+adminRoutes.delete("/deleteuser/:userId", isAuthenticatedUSer, deleteUser);
 
 
 module.exports = adminRoutes;
