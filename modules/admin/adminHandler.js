@@ -123,10 +123,45 @@ const getUserList = async (req, res) => {
     }
 }
 
+const getUserDetails = async (req, res) => {
+    try {
+        const { adminId } = req.decoded;
+        const { userId } = req.params;
+
+        const findAdmin = await adminModel.findOne({ adminId });
+        if (!findAdmin) {
+            return res.status(400).json({
+                meta: { msg: "Admin not found", status: false },
+            });
+        };
+
+        const findUser = await userModel.findOne({ userId });
+        if (findUser) {
+            return res.status(200).json({
+                meta: { msg: "User has been retrieved successfully.", status: true },
+                data: findUser
+            });
+        } else {
+            return res.status(400).json({
+                meta: { msg: "Unable to retrieve the user at this time.", status: false },
+            });
+        }
+    } catch (error) {
+        return res.status(500).json({
+            meta: { msg: "Something went wrong.", status: false },
+            data: error.message
+        });
+    }
+}
 
 
 module.exports = {
     signUp,
     signIn,
-    getUserList
+    getUserList,
+    getUserDetails,
+    // getTransaciotnList,
+    // getTransaciotnDetails,
+    // updateUserDetails
+    // deleteUser
 };
