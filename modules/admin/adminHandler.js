@@ -1,5 +1,6 @@
 const { adminModel } = require("../models/adminModel");
 const { jwtToken, hashPassword, comparePasswords } = require("../../helper/comFun");
+const { userModel } = require("../models/userModel");
 
 
 const signUp = async (req, res) => {
@@ -69,6 +70,7 @@ const signIn = async (req, res) => {
                 });
             }
             const token = await jwtToken({
+                adminId: admindata.adminId,
                 name: admindata.name,
                 email: admindata.email
             });
@@ -90,7 +92,41 @@ const signIn = async (req, res) => {
     }
 }
 
+const getUserList = async (req, res) => {
+    try {
+        const { adminId } = req.decoded;
+
+        const findAdmin = await adminModel.findOne({ adminId });
+        if (!findAdmin) {
+            return res.status(400).json({
+                meta: { msg: "Admin not found", status: false },
+            });
+        };
+
+        const findUserList = await userModel.find();
+
+        if (findUserList.length) {
+            return res.status(200).json({
+                meta: { msg: "User list has been retrieved successfully.", status: true },
+                data: findUserList
+            });
+        } else {
+            return res.status(400).json({
+                meta: { msg: "Unable to retrieve the user list at this time.", status: false },
+            });
+        }
+    } catch (error) {
+        return res.status(500).json({
+            meta: { msg: "Something went wrong.", status: false },
+            data: error.message
+        });
+    }
+}
+
+
+
 module.exports = {
     signUp,
-    signIn
+    signIn,
+    getUserList
 };
