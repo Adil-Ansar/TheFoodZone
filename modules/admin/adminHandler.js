@@ -243,7 +243,6 @@ const updateUserDetails = async (req, res) => {
         };
 
         const updateObj = {
-            ...userId && { userId },
             ...name && { name },
             ...email && { email }
         };
@@ -280,5 +279,4 @@ module.exports = {
     getTransaciotnList,
     getTransaciotnDetails,
     updateUserDetails
-    // deleteUser
 };
