@@ -209,7 +209,7 @@ const getTransaciotnList = async (req, res) => {
             });
         };
 
-        const findTransactionList = await transactionModel.find({ userId });
+        const findTransactionList = await transactionModel.find({ payerId: userId });
 
         if (findTransactionList.length) {
             return res.status(200).json({
@@ -241,10 +241,10 @@ const getTransaciotnDetails = async (req, res) => {
             });
         };
 
-        const findTransaction = await transactionModel.findOne({ 
-            userId,
+        const findTransaction = await transactionModel.findOne({
+            payerId: userId,
             transactionId
-         });
+        });
         if (findTransaction) {
             return res.status(200).json({
                 meta: { msg: "Transaction has been retrieved successfully.", status: true },
