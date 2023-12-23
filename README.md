@@ -6,8 +6,8 @@ This project is an Invoice Payment Collection System built with Node.js, Express
 
 Follow these steps to set up the project locally:
 
-**Prerequisites**
- Node.js installed
+**Prerequisites**:
+ Node.js installed, 
  MongoDB installed and running
 
 Steps
