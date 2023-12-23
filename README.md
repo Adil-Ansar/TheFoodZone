@@ -1,7 +1,8 @@
 Invoice Payment Collection System
 
 This project is an Invoice Payment Collection System built with Node.js, Express, and MongoDB.
-Installation
+
+**Installation**
 
 Follow these steps to set up the project locally:
 Prerequisites
