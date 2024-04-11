@@ -7,7 +7,7 @@ const app = express();
 
 app.use(bodyParser.json({ limit: "100mb" }));
 app.use(bodyParser.urlencoded({ extended: true }));
-dotenv.config({ path: "config.env" });
+dotenv.config({ path: ".env" });
 
 app.get("/", (req, res) => {
     res.send("I am a server");

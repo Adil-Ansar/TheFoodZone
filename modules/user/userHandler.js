@@ -1,5 +1,4 @@
 const { userModel } = require("../models/userModel");
-const { transactionModel } = require("../models/transactionModel");
 
 const { jwtToken, hashPassword, comparePasswords } = require("../../helper/comFun");
 
@@ -198,77 +197,10 @@ const deleteAccount = async (req, res) => {
     }
 }
 
-const getTransaciotnList = async (req, res) => {
-    try {
-        const { userId } = req.decoded;
-
-        const findUser = await userModel.findOne({ userId });
-        if (!findUser) {
-            return res.status(400).json({
-                meta: { msg: "User not found", status: false },
-            });
-        };
-
-        const findTransactionList = await transactionModel.find({ payerId: userId });
-
-        if (findTransactionList.length) {
-            return res.status(200).json({
-                meta: { msg: "TransactionList list has been retrieved successfully.", status: true },
-                data: findTransactionList
-            });
-        } else {
-            return res.status(400).json({
-                meta: { msg: "Unable to retrieve the transactionList list at this time.", status: false },
-            });
-        }
-    } catch (error) {
-        return res.status(500).json({
-            meta: { msg: "Something went wrong.", status: false },
-            data: error.message
-        });
-    }
-}
-
-const getTransaciotnDetails = async (req, res) => {
-    try {
-        const { userId } = req.decoded;
-        const { transactionId } = req.params;
-
-        const findUser = await userModel.findOne({ userId });
-        if (!findUser) {
-            return res.status(400).json({
-                meta: { msg: "User not found", status: false },
-            });
-        };
-
-        const findTransaction = await transactionModel.findOne({
-            payerId: userId,
-            transactionId
-        });
-        if (findTransaction) {
-            return res.status(200).json({
-                meta: { msg: "Transaction has been retrieved successfully.", status: true },
-                data: findTransaction
-            });
-        } else {
-            return res.status(400).json({
-                meta: { msg: "Unable to retrieve the transaction at this time.", status: false },
-            });
-        }
-    } catch (error) {
-        return res.status(500).json({
-            meta: { msg: "Something went wrong.", status: false },
-            data: error.message
-        });
-    }
-}
-
 module.exports = {
     signUp,
     signIn,
     getUserDetails,
     updateUserDetails,
-    deleteAccount,
-    getTransaciotnList,
-    getTransaciotnDetails
+    deleteAccount
 };
